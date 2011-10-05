@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Child {
 	private int[] nums;
 
-	public Child(String fileName){
+	public Child(String fileName, int pid){
 		if(!readFile(fileName)){
 			System.out.println("File was not found.");
 		}
@@ -52,7 +52,11 @@ public class Child {
 	}
 	
 	public static void main(String[] args){
-		Child a = new Child(args[0]);
+		// Extracting pid
+		String temp = args[1];
+		int pid = Integer.parseInt(temp.substring(0, temp.indexOf('@')));
+		
+		Child a = new Child(args[0], pid);
 		
 	}
 }
