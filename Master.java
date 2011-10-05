@@ -1,21 +1,21 @@
 package pkg1;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 
 public class Master {
 
 	private String[] fileList;
-	private Parents p1, p2;
+	OutputStream is1, is2;
 
-	public Master(){
-		System.out.println(ManagementFactory.getRuntimeMXBean().getName());
+	public Master(){	
+		System.out.println(System.getProperty("user.home"));
 		//fileList = new String[new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length];
-		if(!setupFiles()){
+		/**if(!setupFiles()){
 			System.out.println("There were no files found in the directory.  Exiting Program");
 			System.exit(0);
-		}
+		}*/
 		split();
 		
 
@@ -46,9 +46,14 @@ public class Master {
 		}*/
 
 		try {
-			Runtime.getRuntime().exec(new String[] {"java Parents.java", "one", ManagementFactory.getRuntimeMXBean().getName()});
-			Runtime.getRuntime().exec(new String[] {"java Parents.java", "two", ManagementFactory.getRuntimeMXBean().getName()});
-		} catch (IOException e) {
+			//is1 = Runtime.getRuntime().exec(new String[] {"java Parents.java", "one", ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
+			
+			//is2 = Runtime.getRuntime().exec(new String[] {"Parents.java", "two", ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
+			
+			String[]cmdArray = {"java Parents.java", "one", ManagementFactory.getRuntimeMXBean().getName()};
+			String[] env = {"path=;","path=C:\\users\\kang"};
+			Process p1 = Runtime.getRuntime().exec(cmdArray, env);
+		} catch (Exception e) {
 			System.out.println("SOMETHING'S WRONG");
 			e.printStackTrace();
 		}
