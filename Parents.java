@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 public class Parents {
 
+	String fileName;
+
 	public Parents(String[] fileList){
 
 
@@ -16,67 +18,9 @@ public class Parents {
 	}
 
 
+	public static void main(String[] args){
 
 
-
-
-	/**
-	 * Interior class.  Child class.  Reads in and sorts array.
-	 * 
-	 * @author Kang Mo
-	 *
-	 */
-	private class Child{
-
-		private int[] nums;
-		
-		public Child(String fileName){
-			if(!readFile(fileName)){
-				System.out.println("File was not found.");
-			}
-			Arrays.sort(nums);
-		}
-
-		/**
-		 * Takes in the file name and attempts to read in the ints from the
-		 * file into an int array.
-		 *  
-		 * @param fileName
-		 * @return retVal: successful or not.
-		 */
-		private boolean readFile(String fileName){
-			boolean retVal = false;
-			String inStr, str;
-			ArrayList<Integer> temp = new ArrayList<Integer>();
-			Scanner file = null;
-
-			
-			try{
-				file = new Scanner(new File(fileName));
-			}catch(FileNotFoundException e){
-				retVal = false;
-			}
-			
-			
-			while(file.hasNextInt()){
-				temp.add(file.nextInt());
-			}
-			
-			// takes Integers from ArrayList and puts them into int array
-			nums = new int[temp.size()];
-			int j = 0;
-			for(Integer i: temp){
-				nums[j] = i.intValue();
-				j++;
-			}
-
-			return retVal;
-		}
 	}
-
-
-
-
-
 
 }
