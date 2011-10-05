@@ -25,7 +25,6 @@ public class Child {
 	 */
 	private boolean readFile(String fileName){
 		boolean retVal = false;
-		String inStr, str;
 		ArrayList<Integer> temp = new ArrayList<Integer>();
 		Scanner file = null;
 
@@ -50,5 +49,10 @@ public class Child {
 		}
 
 		return retVal;
+	}
+	
+	public static void main(String[] args){
+		Child a = new Child(args[0]);
+		
 	}
 }
