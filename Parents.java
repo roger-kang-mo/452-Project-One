@@ -1,37 +1,32 @@
 package pkg1;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Parents {
+public class Parents extends Process{
 
 	String fileName;
 	String[] fileList;
-	OutputStream in;
+	DataOutputStream in;
+	int mid;
 
-	public Parents(String order, int pid){
+	public Parents(String[] order, String id){
 		
-		int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
-		String[] list1 = (new File(System.getProperty("user.home") + "/mok/CS452/project_one/texts/").list());
-		for(int i = 0; i < size; i++){
-			fileList[i] = list1[i];
-		}
+		fileList = order;
+		in = new DataOutputStream(this.getOutputStream());
 
-
-
+		mid = Integer.parseInt(id.substring(0,id.indexOf('@')));
 	}
 	
 	private void makeChildren(){
 		
 		for(int i = 0; i < fileList.length; i++){
 			try {
-				in = Runtime.getRuntime().exec(new String[] {"java Child.java", fileList[i], ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
-			} catch (IOException e) {
+				//Runtime.getRuntime().exec(new String[] {"java Child.java", fileList[i], ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
+			} catch (Exception e) { 
 				System.out.println("SOMETHING'S WRONG");
 				e.printStackTrace();
 			}
@@ -50,6 +45,40 @@ public class Parents {
 		
 		Parents a = new Parents(args[0], pid);
 
+	}
+
+	public OutputStream getOutputStream() {
+		return null;
+	}
+
+	@Override
+	public InputStream getInputStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public InputStream getErrorStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int waitFor() throws InterruptedException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int exitValue() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
