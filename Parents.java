@@ -2,7 +2,7 @@ package pkg1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +12,7 @@ public class Parents {
 
 	String fileName;
 	String[] fileList;
+	OutputStream in;
 
 	public Parents(String order, int pid){
 		
@@ -29,7 +30,7 @@ public class Parents {
 		
 		for(int i = 0; i < fileList.length; i++){
 			try {
-				Runtime.getRuntime().exec(new String[] {"java Child.java", fileList[i], ManagementFactory.getRuntimeMXBean().getName()});
+				in = Runtime.getRuntime().exec(new String[] {"java Child.java", fileList[i], ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
 			} catch (IOException e) {
 				System.out.println("SOMETHING'S WRONG");
 				e.printStackTrace();
