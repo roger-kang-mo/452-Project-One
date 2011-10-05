@@ -6,8 +6,8 @@ public class Master {
 
 	private String[] fileList;
 	private Parents p1, p2;
-	
-	private PipedReader
+	// oranges
+	private PipedReader 
 	
 	public Master(){
 		//fileList = new String[new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length];
