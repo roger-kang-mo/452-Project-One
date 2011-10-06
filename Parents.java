@@ -22,7 +22,9 @@ public class Parents extends Process implements Runnable{
 		String temp = setupOutputData();
 
 		try {
+			out.flush();
 			out.write(temp.getBytes());
+			out.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +77,7 @@ public class Parents extends Process implements Runnable{
 			}
 		}
 		
-		System.out.println("Parent temp);
+		System.out.println("Parent has " + temp);
 		return temp;
 	}
 

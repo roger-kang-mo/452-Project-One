@@ -28,9 +28,11 @@ public class Child extends Process implements Runnable{
 		else{
 			Arrays.sort(nums);
 			String tmp = setupOutputData();
-			System.out.println("Writing this " +tmp);
+			System.out.println(fileName + ": Writing this " +tmp);
 			try {
+				out.flush();
 				out.write(tmp.getBytes());
+				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -69,7 +71,7 @@ public class Child extends Process implements Runnable{
 
 		while(s!=null){
 			int num = Integer.parseInt(s);
-			System.out.println("Next int: " + num);
+			System.out.println(fileName+ ": Next int: " + num);
 			temp.add(num);
 			try {
 				s = inReader.readLine();

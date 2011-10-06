@@ -2,6 +2,7 @@ package pkg1;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Master {
@@ -30,7 +31,7 @@ public class Master {
 			Scanner s = new Scanner(System.in);
 			try{
 				target = s.nextInt();
-				if(target <= fileList.length && target%2 == 0){
+				if(target <= fileList.length && target%2 == 0 && target >0){
 					valid = true;
 				}
 			}catch(Exception e){
@@ -44,6 +45,7 @@ public class Master {
 		String[] temp = takeInputs();
 		processInputs(temp);
 
+		Arrays.sort(nums);
 		System.out.print("Final List is: ");
 		for(int i =0; i< nums.length; i++)
 			if(i+1 != nums.length)
@@ -56,6 +58,26 @@ public class Master {
 		boolean retValue = true;
 		//fileList = (new File(System.getProperty("user.home") + "/mok/CS452/project_one/texts/").list());
 		fileList = (new File(System.getProperty("user.home") + "/texts/").list());
+		
+		for(int i = 0; i < fileList.length; i++){
+			if(fileList[i].equalsIgnoreCase("final.txt")){
+				String[] tempFileList = new String[fileList.length-1];
+				int counter = 0;
+				
+				for(int j = 0; j < fileList.length; j++){
+					if(fileList[j].equalsIgnoreCase("final.txt")){
+						;
+					}
+					else{
+						tempFileList[counter] = fileList[j];
+						counter++;
+					}
+				}
+				fileList = tempFileList;
+				break;
+			}
+		}
+
 		if(fileList == null){
 			retValue = false;
 		}
@@ -119,6 +141,26 @@ public class Master {
 				nums[counter] = Integer.parseInt(data[j]);
 				counter++;
 			}
+		}
+	}
+	
+	private void writeToFile(){
+		String temp = "";
+		try {
+			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream("final.txt"));
+			for(int i = 0; i<nums.length;){
+				temp+= nums[i] + "\n";
+			}
+			buff.write(temp.getBytes());
+			
+			buff.flush();
+			buff.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
