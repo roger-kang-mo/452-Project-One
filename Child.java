@@ -49,8 +49,8 @@ public class Child extends Process implements Runnable{
 
 
 		try{
-			file = new Scanner(new File(fileName));
-		}catch(FileNotFoundException e){
+			file = new Scanner(fileName);
+		}catch(Exception e){
 			System.out.println("File was not found.");
 			retVal = false;
 		}

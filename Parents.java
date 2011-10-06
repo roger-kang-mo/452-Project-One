@@ -24,6 +24,7 @@ public class Parents extends Process{
 		makeChildren();
 		String[] tempStrings = takeInputs();
 		processInputs(tempStrings);
+		Arrays.sort(nums);
 		String temp = setupOutputData();
 		
 		try {
@@ -34,10 +35,11 @@ public class Parents extends Process{
 		}
 	}
 	
-	private void makeChildren(){
+	private void makeChildren() throws InterruptedException{
 		for(int i = 0; i < fileList.length; i++){
 			children.add(new Child(fileList[i], ManagementFactory.getRuntimeMXBean().getName()));
 		}
+		Thread.sleep(100);
 	}
 	
 	private String[] takeInputs(){
@@ -52,6 +54,10 @@ public class Parents extends Process{
 	
 	private void processInputs(String[] tempStrings){
 		int counter = 0;
+		for(int i =0;i<tempStrings.length; i++){
+			System.out.println(tempStrings[i]);
+		}
+		
 		
 		for(int i = 0; i < tempStrings.length; i++){
 			counter+= tempStrings[i].split(",").length;

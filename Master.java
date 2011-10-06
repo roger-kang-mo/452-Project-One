@@ -22,7 +22,9 @@ public class Master {
 
 	private boolean setupFiles(){
 		boolean retValue = true;
-		fileList = (new File(System.getProperty("user.home") + "/mok/CS452/project_one/texts/").list());
+		//fileList = (new File(System.getProperty("user.home") + "/mok/CS452/project_one/texts/").list());
+		fileList = (new File(System.getProperty("user.home") + "/texts/").list());
+		System.out.println(fileList.length + " ");
 		if(fileList == null){
 			retValue = false;
 		}
@@ -31,7 +33,7 @@ public class Master {
 
 	private void split(){
 		//int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
-		int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
+		int size = (new File(System.getProperty("user.home") +"/texts/").listFiles().length)/2;
 		String[] list1 = new String[size];
 		String[] list2 = new String[size];
 
@@ -51,8 +53,6 @@ public class Master {
 			//String[] env = {"path=;","path=" + System.getProperty("user.home")};
 			//Process p1 = Runtime.getRuntime().exec(cmdArray, env);
 			a1 = new Parents(list1, ManagementFactory.getRuntimeMXBean().getName());
-			
-			
 		} catch (Exception e) {
 			System.out.println("SOMETHING'S WRONG");
 			e.printStackTrace();
