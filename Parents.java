@@ -35,11 +35,10 @@ public class Parents extends Process{
 		}
 	}
 	
-	private void makeChildren() throws InterruptedException{
+	private void makeChildren(){
 		for(int i = 0; i < fileList.length; i++){
 			children.add(new Child(fileList[i], ManagementFactory.getRuntimeMXBean().getName()));
 		}
-		Thread.sleep(100);
 	}
 	
 	private String[] takeInputs(){
