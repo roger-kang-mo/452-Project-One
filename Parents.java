@@ -8,47 +8,79 @@ import java.util.Scanner;
 
 public class Parents extends Process{
 
-	String fileName;
-	String[] fileList;
-	DataOutputStream in;
-	int mid;
+	private String fileName;
+	private String[] fileList;
+	private int mid;
+	private ArrayList<Child> children = new ArrayList<Child>();
+	private ByteArrayOutputStream out;
+	private int[] nums;
 
 	public Parents(String[] order, String id){
 		
 		fileList = order;
-		in = new DataOutputStream(this.getOutputStream());
 
 		mid = Integer.parseInt(id.substring(0,id.indexOf('@')));
+		
+		makeChildren();
+		String[] tempStrings = takeInputs();
+		processInputs(tempStrings);
+		String temp = setupOutputData();
+		
+		try {
+			out.write(temp.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void makeChildren(){
-		
 		for(int i = 0; i < fileList.length; i++){
-			try {
-				//Runtime.getRuntime().exec(new String[] {"java Child.java", fileList[i], ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
-			} catch (Exception e) { 
-				System.out.println("SOMETHING'S WRONG");
-				e.printStackTrace();
-			}
-			
+			children.add(new Child(fileList[i], ManagementFactory.getRuntimeMXBean().getName()));
 		}
 	}
-
-
-	public static void main(String[] args){
+	
+	private String[] takeInputs(){
+		int i = 0;
+		String[] tempStrings = new String[children.size()];
 		
-		// Extracting pid
-		String temp = args[1];
-		int pid = Integer.parseInt(temp.substring(0, temp.indexOf('@')));
+		for(Child c:children){
+			tempStrings[i] = new String(c.getOutputStream().toByteArray());
+		}
+		return tempStrings;
+	}
+	
+	private void processInputs(String[] tempStrings){
+		int counter = 0;
 		
-		System.out.print("parent created");
+		for(int i = 0; i < tempStrings.length; i++){
+			counter+= tempStrings[i].split(",").length;
+		}
 		
-		Parents a = new Parents(args[0], pid);
-
+		nums = new int[counter];
+		
+		counter = 0;
+		for(int i = 0; i< tempStrings.length; i++)
+			for(int j = 0; j < tempStrings[i].length(); j++){
+				String[] data= tempStrings[i].split(",");
+				nums[counter] = Integer.parseInt(data[j]);
+				counter++;
+			}
+	}
+	
+	private String setupOutputData(){
+		String temp = "";
+		for(int i = 0; i < nums.length; i++){
+			temp += nums[i];
+			if(i+1 != nums.length){
+				temp+= ",";
+			}
+		}
+		return temp;
 	}
 
 	public OutputStream getOutputStream() {
-		return null;
+		return out;
 	}
 
 	@Override
