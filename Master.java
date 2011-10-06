@@ -34,10 +34,14 @@ public class Master {
 				if(target <= fileList.length && target%2 == 0 && target >0){
 					valid = true;
 				}
+				else{
+					System.out.println("Invalid input.  Please enter a number between 4 and " + fileList.length +"\n:> ");
+				}
 			}catch(Exception e){
 
 			}
-			System.out.println("Invalid input.  Please enter a number between 4 and " + fileList.length +"\n:> ");
+			
+			
 
 		}while(valid == false);
 
@@ -52,6 +56,13 @@ public class Master {
 				System.out.print(nums[i] + ", ");
 			else
 				System.out.print(nums[i] +"\n");
+		
+		writeToFile();
+		for(Parents p: parentList){
+			p.destroy();
+		}
+		
+		System.exit(0);
 	}
 
 	private boolean setupFiles(){
@@ -91,24 +102,33 @@ public class Master {
 		}
 		fileList = tempList;
 		int size = target/2;
+		int numParents = target/4;
+		int parentCounter = 1;
+		ArrayList<String[]> lists = new ArrayList<String[]>();
 		
 		String[] list1 = new String[size];
 		String[] list2 = new String[size];
-
-		for(int i = 0; i < size; i++){
-			list1[i] = fileList[i];
+		
+		int offSet = 0;
+		
+		for(int k = 0; k < numParents; k++){
+			for(int i = offSet; i < size; i++){
+				list1[i] = fileList[offSet];
+				offSet++;
+			}
+			lists.add(list1);
 		}
-		for(int j = size; j < fileList.length; j++){
-			list2[j-size] = fileList[j];
-		}
-
+	
 		try {
-			a1 = new Parents(list1);
+			for(String[] s:lists){
+				parentList.add(new Parents(s, parentCounter));
+				parentCounter++;
+			}
+			/**a1 = new Parents(list1);
 			b1 = new Parents(list2);
 			parentList.add(a1);
-			parentList.add(b1);
+			parentList.add(b1);*/
 		} catch (Exception e) {
-			System.out.println("SOMETHING'S WRONG");
 			e.printStackTrace();
 		}
 	}
@@ -117,9 +137,10 @@ public class Master {
 		int i = 0;
 		String[] tempStrings = new String[parentList.size()];
 
+		System.out.println("");
 		for(Parents p:parentList){
 			tempStrings[i] = new String(p.getOutputStream().toByteArray());
-			System.out.println("Parent has : " +(new String(p.getOutputStream().toByteArray())));
+			System.out.println("Parent " + p.getParentNum() +" sent : " +(new String(p.getOutputStream().toByteArray())));
 			i++;
 		}
 		return tempStrings;
@@ -147,14 +168,27 @@ public class Master {
 	private void writeToFile(){
 		String temp = "";
 		try {
-			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream("final.txt"));
-			for(int i = 0; i<nums.length;){
-				temp+= nums[i] + "\n";
+			String k = System.getProperty("user.home") + "/texts/";
+			BufferedWriter buff = new BufferedWriter(new FileWriter(k + "final.txt"));
+			int count = 0;
+			for(int i = 0; i<nums.length;i++){
+				if(i+1 < nums.length && count < 9)
+					temp+= nums[i] + ", ";
+				else
+					temp+= nums[i];
+				count++;
+				if(count == 10){
+					buff.write(temp);
+					buff.newLine();
+					temp = "";
+					count = 0;
+				}
 			}
-			buff.write(temp.getBytes());
+			
 			
 			buff.flush();
 			buff.close();
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

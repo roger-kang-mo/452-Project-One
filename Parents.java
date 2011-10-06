@@ -10,11 +10,12 @@ public class Parents extends Process implements Runnable{
 	private ArrayList<Child> children = new ArrayList<Child>();
 	private ByteArrayOutputStream out = new ByteArrayOutputStream();
 	private int[] nums;
+	private int parentNum;
 
-	public Parents(String[] order){
+	public Parents(String[] order, int pNum){
 
 		fileList = order;
-		
+		parentNum = pNum;
 		makeChildren();
 		String[] tempStrings = takeInputs();
 		processInputs(tempStrings);
@@ -28,6 +29,10 @@ public class Parents extends Process implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		for(Child c: children){
+			c.destroy();
 		}
 	}
 
@@ -77,7 +82,7 @@ public class Parents extends Process implements Runnable{
 			}
 		}
 		
-		System.out.println("Parent has " + temp);
+		System.out.println("Parent " + parentNum + " has " + temp);
 		return temp;
 	}
 
@@ -119,6 +124,10 @@ public class Parents extends Process implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public int getParentNum(){
+		return parentNum;
 	}
 
 }
