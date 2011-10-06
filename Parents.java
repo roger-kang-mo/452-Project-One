@@ -1,28 +1,21 @@
 package pkg1;
 
 import java.io.*;
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
-public class Parents extends Process{
+public class Parents extends Process implements Runnable{
 
-	private String fileName;
 	private String[] fileList;
-	private int mid;
 	private ArrayList<Child> children = new ArrayList<Child>();
 	private ByteArrayOutputStream out = new ByteArrayOutputStream();
 	private int[] nums;
 
-	public Parents(String[] order, String id){
+	public Parents(String[] order){
 
 		fileList = order;
-
-		mid = Integer.parseInt(id.substring(0,id.indexOf('@')));
-
+		
 		makeChildren();
-
 		String[] tempStrings = takeInputs();
 		processInputs(tempStrings);
 		Arrays.sort(nums);
@@ -38,7 +31,7 @@ public class Parents extends Process{
 
 	private void makeChildren(){
 		for(int i = 0; i < fileList.length; i++){
-			children.add(new Child(fileList[i], ManagementFactory.getRuntimeMXBean().getName()));
+			children.add(new Child(fileList[i]));
 		}
 	}
 
@@ -81,11 +74,12 @@ public class Parents extends Process{
 				temp+= ",";
 			}
 		}
-		System.out.println(temp);
+		
+		System.out.println("Parent temp);
 		return temp;
 	}
 
-	public OutputStream getOutputStream() {
+	public ByteArrayOutputStream getOutputStream() {
 		return out;
 	}
 
@@ -117,6 +111,12 @@ public class Parents extends Process{
 	public void destroy() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

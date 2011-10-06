@@ -1,39 +1,75 @@
 package pkg1;
 
-import java.io.File;
 import java.io.*;
-import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Master {
 
 	private String[] fileList;
-	OutputStream is1, is2;
-	Parents a1, b1;
+	private OutputStream is1, is2;
+	private Parents a1, b1;
+	private ArrayList<Parents> parentList = new ArrayList<Parents>();
+	private int[] nums;
 
-	public Master(){	
-		System.out.println(System.getProperty("user.home"));
+	public Master(){
+		System.out.println("Welcome!");
+
 		//fileList = new String[new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length];
 		if(!setupFiles()){
 			System.out.println("There were no files found in the directory.  Exiting Program");
 			System.exit(0);
 		}
-		split();
+		System.out.println("There are currently " + fileList.length + " files in the directory");
+		System.out.println("How many would you like to sort?\n:> ");
+
+		int target = 0;
+
+		boolean valid = false;
+		do{
+			Scanner s = new Scanner(System.in);
+			try{
+				target = s.nextInt();
+				if(target <= fileList.length && target%2 == 0){
+					valid = true;
+				}
+			}catch(Exception e){
+
+			}
+			System.out.println("Invalid input.  Please enter a number between 4 and " + fileList.length +"\n:> ");
+
+		}while(valid == false);
+
+		createParents(target);
+		String[] temp = takeInputs();
+		processInputs(temp);
+
+		System.out.print("Final List is: ");
+		for(int i =0; i< nums.length; i++)
+			if(i+1 != nums.length)
+				System.out.print(nums[i] + ", ");
+			else
+				System.out.print(nums[i] +"\n");
 	}
 
 	private boolean setupFiles(){
 		boolean retValue = true;
 		//fileList = (new File(System.getProperty("user.home") + "/mok/CS452/project_one/texts/").list());
 		fileList = (new File(System.getProperty("user.home") + "/texts/").list());
-		System.out.println(fileList.length + " ");
 		if(fileList == null){
 			retValue = false;
 		}
 		return retValue;
 	}
 
-	private void split(){
-		//int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
-		int size = (new File(System.getProperty("user.home") +"/texts/").listFiles().length)/2;
+	private void createParents(int target){
+		String[] tempList = new String[target];
+		for(int k = 0; k < target; k++){
+			tempList[k] = fileList[k];
+		}
+		fileList = tempList;
+		int size = target/2;
+		
 		String[] list1 = new String[size];
 		String[] list2 = new String[size];
 
@@ -45,20 +81,47 @@ public class Master {
 		}
 
 		try {
-			//is1 = Runtime.getRuntime().exec(new String[] {"java Parents.java", "one", ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
-			
-			//is2 = Runtime.getRuntime().exec(new String[] {"Parents.java", "two", ManagementFactory.getRuntimeMXBean().getName()}).getOutputStream();
-			
-			//String[]cmdArray = {"Parents.java", "one", ManagementFactory.getRuntimeMXBean().getName()};
-			//String[] env = {"path=;","path=" + System.getProperty("user.home")};
-			//Process p1 = Runtime.getRuntime().exec(cmdArray, env);
-			a1 = new Parents(list1, ManagementFactory.getRuntimeMXBean().getName());
+			a1 = new Parents(list1);
+			b1 = new Parents(list2);
+			parentList.add(a1);
+			parentList.add(b1);
 		} catch (Exception e) {
 			System.out.println("SOMETHING'S WRONG");
 			e.printStackTrace();
 		}
 	}
-	
+
+	private String[] takeInputs(){
+		int i = 0;
+		String[] tempStrings = new String[parentList.size()];
+
+		for(Parents p:parentList){
+			tempStrings[i] = new String(p.getOutputStream().toByteArray());
+			System.out.println("Parent has : " +(new String(p.getOutputStream().toByteArray())));
+			i++;
+		}
+		return tempStrings;
+	}
+
+	private void processInputs(String[] tempStrings){
+		int counter = 0;
+
+		for(int i = 0; i < tempStrings.length; i++){
+			counter+= tempStrings[i].split(",").length;
+		}
+
+		nums = new int[counter];
+
+		counter = 0;
+		for(int i = 0; i< tempStrings.length; i++){
+			String[] data= tempStrings[i].split(",");
+			for(int j = 0; j < data.length; j++){
+				nums[counter] = Integer.parseInt(data[j]);
+				counter++;
+			}
+		}
+	}
+
 	public static void main(String[] args){
 		Master a = new Master();
 	}

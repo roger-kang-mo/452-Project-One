@@ -2,29 +2,25 @@ package pkg1;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedOutputStream;
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+
 
 public class Child extends Process implements Runnable{
 	private int[] nums;
-	private int pid;
+
 	private ByteArrayOutputStream out = new ByteArrayOutputStream();
 	private String fileName = "";
 
-	public Child(String pFileName, String pPid){
+	public Child(String pFileName){
 		fileName = pFileName;
-		pid = Integer.parseInt(pPid.substring(0,pPid.indexOf('@')));
-		hi(fileName);
+
+		greeting(fileName);
 
 		if(!readFile(fileName)){
 			System.out.println("There was a problem reading in the file");
@@ -109,7 +105,7 @@ public class Child extends Process implements Runnable{
 		return fileName;
 	}
 
-	private void hi(String f){
+	private void greeting(String f){
 		System.out.println("Child created.  I will sort file " + f);
 	}
 
