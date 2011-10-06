@@ -1,9 +1,11 @@
 package pkg1;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,9 +19,12 @@ public class Child extends Process implements Runnable{
 	private int[] nums;
 	private int pid;
 	private ByteArrayOutputStream out = new ByteArrayOutputStream();
+	private String fileName = "";
 
-	public Child(String fileName, String pPid){
+	public Child(String pFileName, String pPid){
+		fileName = pFileName;
 		pid = Integer.parseInt(pPid.substring(0,pPid.indexOf('@')));
+		hi(fileName);
 
 		if(!readFile(fileName)){
 			System.out.println("There was a problem reading in the file");
@@ -27,6 +32,7 @@ public class Child extends Process implements Runnable{
 		else{
 			Arrays.sort(nums);
 			String tmp = setupOutputData();
+			System.out.println("Writing this " +tmp);
 			try {
 				out.write(tmp.getBytes());
 			} catch (IOException e) {
@@ -43,21 +49,38 @@ public class Child extends Process implements Runnable{
 	 * @return retVal: successful or not.
 	 */
 	private boolean readFile(String fileName){
-		boolean retVal = false;
+		boolean retVal = true;
 		ArrayList<Integer> temp = new ArrayList<Integer>();
-		Scanner file = null;
+		BufferedReader inReader = null;
+		FileReader inFile = null;
 
-
-		try{
-			file = new Scanner(fileName);
-		}catch(Exception e){
-			System.out.println("File was not found.");
+		try {
+			inFile = new FileReader(new File(System.getProperty("user.home") + "/texts/" +fileName));
+			inReader = new BufferedReader(inFile);
+		} catch (FileNotFoundException e) {
 			retVal = false;
+			e.printStackTrace();
+		}
+		inReader = new BufferedReader(inFile);
+		String s = "";
+		try {
+			s = inReader.readLine();
+		} catch (IOException e) {
+			retVal = false;
+			e.printStackTrace();
 		}
 
 
-		while(file.hasNextInt()){
-			temp.add(file.nextInt());
+		while(s!=null){
+			int num = Integer.parseInt(s);
+			System.out.println("Next int: " + num);
+			temp.add(num);
+			try {
+				s = inReader.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		// takes Integers from ArrayList and puts them into int array
@@ -70,7 +93,7 @@ public class Child extends Process implements Runnable{
 
 		return retVal;
 	}
-	
+
 	private String setupOutputData(){
 		String temp = "";
 		for(int i = 0; i < nums.length; i++){
@@ -81,7 +104,14 @@ public class Child extends Process implements Runnable{
 		}
 		return temp;
 	}
-	
+
+	public String getFileName(){
+		return fileName;
+	}
+
+	private void hi(String f){
+		System.out.println("Child created.  I will sort file " + f);
+	}
 
 
 	public ByteArrayOutputStream getOutputStream() {
@@ -122,6 +152,6 @@ public class Child extends Process implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

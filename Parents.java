@@ -12,21 +12,22 @@ public class Parents extends Process{
 	private String[] fileList;
 	private int mid;
 	private ArrayList<Child> children = new ArrayList<Child>();
-	private ByteArrayOutputStream out;
+	private ByteArrayOutputStream out = new ByteArrayOutputStream();
 	private int[] nums;
 
 	public Parents(String[] order, String id){
-		
+
 		fileList = order;
 
 		mid = Integer.parseInt(id.substring(0,id.indexOf('@')));
-		
+
 		makeChildren();
+
 		String[] tempStrings = takeInputs();
 		processInputs(tempStrings);
 		Arrays.sort(nums);
 		String temp = setupOutputData();
-		
+
 		try {
 			out.write(temp.getBytes());
 		} catch (IOException e) {
@@ -34,45 +35,44 @@ public class Parents extends Process{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void makeChildren(){
 		for(int i = 0; i < fileList.length; i++){
 			children.add(new Child(fileList[i], ManagementFactory.getRuntimeMXBean().getName()));
 		}
 	}
-	
+
 	private String[] takeInputs(){
 		int i = 0;
 		String[] tempStrings = new String[children.size()];
-		
+
 		for(Child c:children){
 			tempStrings[i] = new String(c.getOutputStream().toByteArray());
+			System.out.println(c.getFileName() + " has : " +(new String(c.getOutputStream().toByteArray())));
+			i++;
 		}
 		return tempStrings;
 	}
-	
+
 	private void processInputs(String[] tempStrings){
 		int counter = 0;
-		for(int i =0;i<tempStrings.length; i++){
-			System.out.println(tempStrings[i]);
-		}
-		
-		
+
 		for(int i = 0; i < tempStrings.length; i++){
 			counter+= tempStrings[i].split(",").length;
 		}
-		
+
 		nums = new int[counter];
-		
+
 		counter = 0;
-		for(int i = 0; i< tempStrings.length; i++)
-			for(int j = 0; j < tempStrings[i].length(); j++){
-				String[] data= tempStrings[i].split(",");
+		for(int i = 0; i< tempStrings.length; i++){
+			String[] data= tempStrings[i].split(",");
+			for(int j = 0; j < data.length; j++){
 				nums[counter] = Integer.parseInt(data[j]);
 				counter++;
 			}
+		}
 	}
-	
+
 	private String setupOutputData(){
 		String temp = "";
 		for(int i = 0; i < nums.length; i++){
@@ -81,6 +81,7 @@ public class Parents extends Process{
 				temp+= ",";
 			}
 		}
+		System.out.println(temp);
 		return temp;
 	}
 
@@ -115,7 +116,7 @@ public class Parents extends Process{
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
