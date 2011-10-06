@@ -30,6 +30,7 @@ public class Master {
 	}
 
 	private void split(){
+		//int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
 		int size = (new File(System.getProperty("user.home") +"/mok/CS452/project_one/").listFiles().length)/2;
 		String[] list1 = new String[size];
 		String[] list2 = new String[size];
